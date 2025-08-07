@@ -4,14 +4,18 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
+import { FaUserPlus, FaExclamationCircle, FaSpinner } from "react-icons/fa";
+import { Button } from "../../components/ui/button";
 import {
-	FaUserPlus,
-	FaEnvelope,
-	FaLock,
-	FaCheck,
-	FaExclamationCircle,
-	FaSpinner,
-} from "react-icons/fa";
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Alert, AlertDescription } from "../../components/ui/alert";
 
 export default function RegisterPage() {
 	const [formData, setFormData] = useState({
@@ -83,199 +87,153 @@ export default function RegisterPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+		<div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
 			<div className="max-w-lg w-full">
-				{/* Main card */}
-				<div className="bg-white rounded-lg shadow-md border border-gray-200 p-8 space-y-8">
-					{/* Header */}
-					<div className="text-center">
+				<Card className="shadow-lg">
+					<CardHeader className="text-center">
 						<div className="mx-auto h-16 w-16 bg-green-600 rounded-full flex items-center justify-center mb-6">
 							<FaUserPlus className="h-8 w-8 text-white" />
 						</div>
-						<h2 className="text-3xl font-bold text-gray-900">
+						<CardTitle className="text-3xl font-bold">
 							Join Shop Life
-						</h2>
-						<p className="mt-3 text-gray-600">
+						</CardTitle>
+						<CardDescription className="text-base">
 							Create your account and start your shopping journey
-						</p>
-					</div>
-
-					{/* Form */}
-					<form className="space-y-6" onSubmit={handleSubmit}>
-						<div className="space-y-5">
-							{/* Name fields */}
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<label
-										htmlFor="firstName"
-										className="block text-sm font-medium text-gray-700 mb-2"
-									>
-										First name
-									</label>
-									<input
-										id="firstName"
-										name="firstName"
-										type="text"
-										autoComplete="given-name"
-										required
-										className="block w-full px-4 py-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
-										placeholder="First name"
-										value={formData.firstName}
-										onChange={handleChange}
-									/>
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-6">
+						{/* Form */}
+						<form className="space-y-6" onSubmit={handleSubmit}>
+							<div className="space-y-4">
+								{/* Name fields */}
+								<div className="grid grid-cols-2 gap-4">
+									<div className="space-y-2">
+										<Label htmlFor="firstName">
+											First name
+										</Label>
+										<Input
+											id="firstName"
+											name="firstName"
+											type="text"
+											autoComplete="given-name"
+											required
+											placeholder="First name"
+											value={formData.firstName}
+											onChange={handleChange}
+										/>
+									</div>
+									<div className="space-y-2">
+										<Label htmlFor="lastName">
+											Last name
+										</Label>
+										<Input
+											id="lastName"
+											name="lastName"
+											type="text"
+											autoComplete="family-name"
+											required
+											placeholder="Last name"
+											value={formData.lastName}
+											onChange={handleChange}
+										/>
+									</div>
 								</div>
-								<div>
-									<label
-										htmlFor="lastName"
-										className="block text-sm font-medium text-gray-700 mb-2"
-									>
-										Last name
-									</label>
-									<input
-										id="lastName"
-										name="lastName"
-										type="text"
-										autoComplete="family-name"
-										required
-										className="block w-full px-4 py-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
-										placeholder="Last name"
-										value={formData.lastName}
-										onChange={handleChange}
-									/>
-								</div>
-							</div>
 
-							{/* Email */}
-							<div>
-								<label
-									htmlFor="email"
-									className="block text-sm font-medium text-gray-700 mb-2"
-								>
-									Email address
-								</label>
-								<div className="relative">
-									<input
+								{/* Email */}
+								<div className="space-y-2">
+									<Label htmlFor="email">Email address</Label>
+									<Input
 										id="email"
 										name="email"
 										type="email"
 										autoComplete="email"
 										required
-										className="block w-full px-4 py-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
 										placeholder="Enter your email"
 										value={formData.email}
 										onChange={handleChange}
 									/>
-									<div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-										<FaEnvelope className="h-5 w-5 text-gray-400" />
-									</div>
 								</div>
-							</div>
 
-							{/* Password */}
-							<div>
-								<label
-									htmlFor="password"
-									className="block text-sm font-medium text-gray-700 mb-2"
-								>
-									Password
-								</label>
-								<div className="relative">
-									<input
+								{/* Password */}
+								<div className="space-y-2">
+									<Label htmlFor="password">Password</Label>
+									<Input
 										id="password"
 										name="password"
 										type="password"
 										autoComplete="new-password"
 										required
-										className="block w-full px-4 py-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
 										placeholder="Create a password"
 										value={formData.password}
 										onChange={handleChange}
 									/>
-									<div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-										<FaLock className="h-5 w-5 text-gray-400" />
-									</div>
+									<p className="text-xs text-muted-foreground">
+										Password must be at least 6 characters
+										long
+									</p>
 								</div>
-								<p className="mt-1 text-xs text-gray-500">
-									Password must be at least 6 characters long
-								</p>
-							</div>
 
-							{/* Confirm Password */}
-							<div>
-								<label
-									htmlFor="confirmPassword"
-									className="block text-sm font-medium text-gray-700 mb-2"
-								>
-									Confirm password
-								</label>
-								<div className="relative">
-									<input
-										id="confirmPassword"
-										name="confirmPassword"
-										type="password"
-										autoComplete="new-password"
-										required
-										className="block w-full px-4 py-3 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors duration-200 text-gray-900 placeholder-gray-500"
-										placeholder="Confirm your password"
-										value={formData.confirmPassword}
-										onChange={handleChange}
-									/>
-									<div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-										<FaCheck className="h-5 w-5 text-gray-400" />
+								{/* Confirm Password */}
+								<div className="space-y-2">
+									<Label htmlFor="confirmPassword">
+										Confirm password
+									</Label>
+									<div className="relative">
+										<Input
+											id="confirmPassword"
+											name="confirmPassword"
+											type="password"
+											autoComplete="new-password"
+											required
+											placeholder="Confirm your password"
+											value={formData.confirmPassword}
+											onChange={handleChange}
+										/>
 									</div>
 								</div>
 							</div>
-						</div>
 
-						{error && (
-							<div className="bg-red-100 border border-red-300 rounded-md p-4">
-								<div className="flex">
-									<div className="flex-shrink-0">
-										<FaExclamationCircle className="h-5 w-5 text-red-500" />
-									</div>
-									<div className="ml-3">
-										<p className="text-sm text-red-700">
-											{error}
-										</p>
-									</div>
-								</div>
-							</div>
-						)}
+							{error && (
+								<Alert variant="destructive">
+									<FaExclamationCircle className="h-4 w-4" />
+									<AlertDescription>{error}</AlertDescription>
+								</Alert>
+							)}
 
-						<div>
-							<button
+							<Button
 								type="submit"
 								disabled={isLoading}
-								className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 shadow-sm"
+								className="w-full"
+								size="lg"
 							>
 								{isLoading ? (
-									<div className="flex items-center">
-										<FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" />
+									<>
+										<FaSpinner className="animate-spin mr-2 h-4 w-4" />
 										Creating account...
-									</div>
+									</>
 								) : (
-									<span className="flex items-center">
-										<FaUserPlus className="w-5 h-5 mr-2" />
+									<>
+										<FaUserPlus className="w-4 h-4 mr-2" />
 										Create account
-									</span>
+									</>
 								)}
-							</button>
-						</div>
-					</form>
+							</Button>
+						</form>
 
-					{/* Footer */}
-					<div className="text-center border-t border-gray-200 pt-6">
-						<p className="text-sm text-gray-600">
-							Already have an account?{" "}
-							<Link
-								href="/login"
-								className="font-medium text-green-600 hover:text-green-700 transition-colors duration-200"
-							>
-								Sign in here
-							</Link>
-						</p>
-					</div>
-				</div>
+						{/* Footer */}
+						<div className="text-center border-t pt-6">
+							<p className="text-sm text-muted-foreground">
+								Already have an account?{" "}
+								<Link
+									href="/login"
+									className="font-medium text-primary hover:underline"
+								>
+									Sign in here
+								</Link>
+							</p>
+						</div>
+					</CardContent>
+				</Card>
 			</div>
 		</div>
 	);
