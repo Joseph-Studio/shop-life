@@ -39,12 +39,15 @@ export default function CategoryFilter() {
 	}, [products, selectedCategory, q]);
 
 	const handleAddToCart = (product) => {
-		if (!user) { // Go to login page if user is not authenticated
+		if (!user) {
 			router.push("/login");
 			return;
+		} else {
+			// Read existing cart from localStorage
+			const existing = JSON.parse(localStorage.getItem("cartItems") || "[]");
+			existing.push(product);
+			localStorage.setItem("cartItems", JSON.stringify(existing));
 		}
-
-		// TODO: Implement actual cart functionality here
 		alert(`Added ${product.title} (ID: ${product.id}) to cart!`);
 	};
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import { Button } from "../../components/ui/button";
 import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
+import { FaCartShopping } from "react-icons/fa6";
 
 const Header = () => {
 	const { user, logout } = useAuth();
@@ -28,10 +29,19 @@ const Header = () => {
 						>
 							ShopLife
 						</Link>
+
 					</div>
+
+					        
 
 					{/* Auth Buttons */}
 					<div className="flex items-center space-x-4">
+						<Link href="/shoppingCart">
+						<button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+         				 		<FaCartShopping />
+        					</button>
+						</Link>
+
 						{user ? (
 							<div className="flex items-center space-x-4">
 								<span className="text-sm text-gray-700">
@@ -78,3 +88,4 @@ const Header = () => {
 };
 
 export default Header;
+
