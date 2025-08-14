@@ -44,6 +44,32 @@ export const AuthContextProvider = ({ children }) => {
 				displayName: `${firstName} ${lastName}`,
 			});
 
+			// Save user details to MongoDB
+			try {
+				const response = await fetch("/api/auth/register", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						email,
+						firstName,
+						lastName,
+						firebaseUid: userCredential.user.uid,
+					}),
+				});
+
+				if (!response.ok) {
+					console.error(
+						"Failed to save user to MongoDB:",
+						await response.text()
+					);
+				}
+			} catch (mongoError) {
+				console.error("Error saving user to MongoDB:", mongoError);
+				// Don't throw this error - Firebase user was created successfully
+			}
+
 			return userCredential;
 		} catch (error) {
 			throw error;
