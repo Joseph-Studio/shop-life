@@ -23,7 +23,7 @@ export default function ShoppingCartPage() {
       }
     };
     fetchCart();
-  }, [user]);  // Reload when user changes
+  }, [user]);  
 
   const removeItem = async (productId) => {
     try {

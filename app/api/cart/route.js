@@ -1,9 +1,5 @@
 import connectToDB from '@/app/lib/mongodb';
 import Cart from '../../models/Cart';
-// Explanation:
-// 1st ../ → exits /cart
-// 2nd ../ → exits /api
-// Then enters /models
 
 export async function GET(request) {
   try {
