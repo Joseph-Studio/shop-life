@@ -3,85 +3,78 @@ import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { X } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 export default function ShoppingCartPage() {
-    const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const { user } = useAuth();
 
-    useEffect(() => {
-        const items = JSON.parse(localStorage.getItem("cartItems") || "[]");
-        setCartItems(items);
-    }, []);
-
-    
-    const removeItem = (index) => {
-        const updatedCart = cartItems.filter((_, idx) => idx !== index);
-        setCartItems(updatedCart);
-        localStorage.setItem('cartItems', JSON.stringify(updatedCart));
+  useEffect(() => {
+    const fetchCart = async () => {
+      if (!user?.id) return;
+      try {
+        const res = await fetch('/api/cart', {
+          headers: { 'userId': user.id }
+        });
+        const data = await res.json();
+        setCartItems(data.items || []);
+      } catch (error) {
+        console.error('Fetch error:', error);
+      }
     };
+    fetchCart();
+  }, [user]);  // Reload when user changes
 
-    
-    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const removeItem = async (productId) => {
+    try {
+      const updatedCart = cartItems.filter(item => item.productId !== productId);
+      setCartItems(updatedCart);
+      await fetch('/api/cart', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'userId': user.id 
+        },
+        body: JSON.stringify({ items: updatedCart })
+      });
+    } catch (error) {
+      console.error('Delete failed:', error);
+    }
+  };
 
-    return (
-        <>
-            <Header />
-            
-            <div style={{ maxWidth: 800, margin: '0 auto', padding: 24 }}>
-                <h1>Shopping Cart</h1>
-                <div>
-                    {cartItems.length === 0 ? (
-                        <p>Your cart is currently empty.</p>
-                    ) : (
-                        <>
-                            <ul>
-                                {cartItems.map((item, idx) => (
-                                    <li
-                                        key={idx}
-                                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}
-                                    >
-                                        <span>{item.title}</span>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                            <span style={{ color: 'red' }}>${item.price}</span>
-                                            <button
-                                                onClick={() => removeItem(idx)}
-                                                style={{
-                                                    background: 'transparent',
-                                                    border: 'none',
-                                                    cursor: 'pointer',
-                                                    padding: 0,
-                                                }}
-                                            >
-                                                <X size={16} color="gray" />
-                                            </button>
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
+  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
-                            
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 16, gap: '12px' }}>
-                                <p style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>
-                                    Total: <span style={{ color: 'green' }}>${total.toFixed(2)}</span>
-                                </p>
-                                <button 
-                                    style={{
-                                        backgroundColor: '#0070f3',
-                                        color: 'white',
-                                        padding: '8px 16px',
-                                        borderRadius: '4px',
-                                        border: 'none',
-                                        cursor: 'pointer'
-                                    }}
-                                    onClick={() => alert('Proceeding to purchase...')}
-                                >
-                                    Purchase
-                                </button>
-                            </div>
-                        </>
-                    )}
-                </div>
+  return (
+    <>
+      <Header />
+      <div style={{ maxWidth: 800, margin: '0 auto', padding: 24 }}>
+        <h1>Shopping Cart</h1>
+        {cartItems.length === 0 ? (
+          <p>Your cart is empty.</p>
+        ) : (
+          <>
+            <ul>
+              {cartItems.map((item) => (
+                <li key={item.productId} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                  <span>{item.title}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ color: 'red' }}>${item.price}</span>
+                    <button onClick={() => removeItem(item.productId)}>
+                      <X size={16} color="gray" />
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+              <p style={{ fontWeight: 'bold' }}>
+                Total: <span style={{ color: 'green' }}>${total.toFixed(2)}</span>
+              </p>
             </div>
-            <Footer />
-        </>
-    );
+          </>
+        )}
+      </div>
+      <Footer />
+    </>
+  );
 }
