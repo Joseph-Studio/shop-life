@@ -6,6 +6,7 @@ import { Button } from "../../components/ui/button";
 import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { FaCartShopping } from "react-icons/fa6";
 
+
 const Header = () => {
 	const { user, logout } = useAuth();
 
