@@ -13,8 +13,8 @@ async function connectToDB() {
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false, // Disable mongoose buffering
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      bufferCommands: false, 
+      serverSelectionTimeoutMS: 5000, 
     };
 
     cached.promise = mongoose.connect(DATABASE_URL, opts).then(mongoose => {

@@ -1,4 +1,4 @@
-import connectToDB from '@/lib/mongoose';
+import connectToDB from '@/app/lib/mongodb';
 import Cart from '../../models/Cart';
 // Explanation:
 // 1st ../ → exits /cart

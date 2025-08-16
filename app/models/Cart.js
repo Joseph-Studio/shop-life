@@ -10,5 +10,5 @@ const cartSchema = new mongoose.Schema({
   items: [cartItemSchema]
 }, { timestamps: true });
 
-// Prevent model recompilation in development
+
 export default mongoose.models?.Cart || mongoose.model('Cart', cartSchema);
