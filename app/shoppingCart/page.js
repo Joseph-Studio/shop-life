@@ -4,6 +4,9 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { X } from 'lucide-react';
 
+
+
+
 export default function ShoppingCartPage() {
     const [cartItems, setCartItems] = useState([]);
 
